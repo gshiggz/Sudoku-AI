@@ -4,14 +4,19 @@ def cross(a,b):
     return [s+t for s in a for t in b]
 rows = 'ABCDEFGHI'
 cols = '123456789'
-cols back = cols[::-1]
+cols_back = cols[::-1]
 boxes = cross(rows, cols)
 
 row_units = [cross(r, cols) for r in rows]
 col_units = [cross(rows, c) for c in cols]
 box_units = [cross(rs, cs) for rs in ('ABC', 'DEF', 'GHI') for cs in ('123','456','789')]
-diag_units = [cross(rows
+diag_units = [[rows[i]+cols[i] for i in range(len(rows))]]
+diag2_units = [[rows[i]+cols_back[i] for i in range(len(rows))]]
+unitlist = row_units + col_units + box_units + diag_units + diag2_units
 
+peers = 
+
+print ('diag_units, diag2_units')
 
 def assign_value(values, box, value):
     """
