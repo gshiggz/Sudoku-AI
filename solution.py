@@ -1,5 +1,18 @@
 assignments = []
 
+def cross(a,b):
+    return [s+t for s in a for t in b]
+rows = 'ABCDEFGHI'
+cols = '123456789'
+cols back = cols[::-1]
+boxes = cross(rows, cols)
+
+row_units = [cross(r, cols) for r in rows]
+col_units = [cross(rows, c) for c in cols]
+box_units = [cross(rs, cs) for rs in ('ABC', 'DEF', 'GHI') for cs in ('123','456','789')]
+diag_units = [cross(rows
+
+
 def assign_value(values, box, value):
     """
     Please use this function to update your values dictionary!
