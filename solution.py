@@ -14,9 +14,11 @@ diag_units = [[rows[i]+cols[i] for i in range(len(rows))]]
 diag2_units = [[rows[i]+cols_back[i] for i in range(len(rows))]]
 unitlist = row_units + col_units + box_units + diag_units + diag2_units
 
-peers = 
 
-print ('diag_units, diag2_units')
+units = dict((s, [u for u in unitlist if s in u]) for s in boxes)
+
+peers = dict((s, set(sum(units[s],[]))-set([s])) for s in boxes)
+
 
 def assign_value(values, box, value):
     """
@@ -41,6 +43,22 @@ def naked_twins(values):
     Returns:
         the values dictionary with the naked twins eliminated from peers.
     """
+    possible_twins = [box for box in values.keys() if len(values[box]) == 2]
+    naked_twins = [[box1, box2] for box1 in possible_twins for box2 in peers[box1] \
+                   if set(values[box1]==set(values[box2]))]
+    for i in range(len(naked_twins)):
+        box1 = naked_twins[i][0]
+        box2 = naked_twins[i][1]
+        peers1 = set(peers[box1])
+        peers2 = set(peers[box2])
+        peers_intersect - peers1.intersection(peers2)
+
+        for peer_value in peers_interesect:
+            if len(values[peer_value]) > 2:
+                for remaining_value in values[box1]:
+                    values = assign_value(values, peer_value, values[peer_value].replace(remaining_value, ''))
+    return values
+
 
     # Find all instances of naked twins
     # Eliminate the naked twins as possibilities for their peers
