@@ -3,11 +3,11 @@
 
 # Question 1 (Naked Twins)
 Q: How do we use constraint propagation to solve the naked twins problem?  
-A: *Student should provide answer here*
+A: We use constraint propagation by first identifying the box values that have 2 possible answers in them. Given the prior constraint we then cycle through checking the other boxes that are a possible match that share the same 'peers' as the box 1. The next constraint checks if the values match then we enumerate through the intersection of the peers of both matches. Lastly we replace the values that are remaining with "".
 
 # Question 2 (Diagonal Sudoku)
 Q: How do we use constraint propagation to solve the diagonal sudoku problem?  
-A: *Student should provide answer here*
+A: 
 
 ### Install
 
