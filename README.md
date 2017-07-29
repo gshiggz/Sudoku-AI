@@ -7,7 +7,7 @@ A: We use constraint propagation by first identifying the box values that have 2
 
 # Question 2 (Diagonal Sudoku)
 Q: How do we use constraint propagation to solve the diagonal sudoku problem?  
-A: 
+A: The Diagonals are solved after codifying the board giving each cell a unique location. The units for each row, column, box, diagonal and reversed diagonal to appropriately defining the constraints of the given units. It is then iterated through the dictionary of individual cell locations where each cell is given its own unique list of units and peers. The eliminate, only_choice and reduce_puzzle functions work to solve the diagonals given the specified constraints.  
 
 ### Install
 
