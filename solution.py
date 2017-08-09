@@ -1,5 +1,6 @@
 assignments = []
 
+#Setting up the board
 def cross(a, b):
     return [s+t for s in a for t in b]
 rows = 'ABCDEFGHI'
@@ -7,6 +8,7 @@ cols = '123456789'
 cols_back = cols[::-1]
 boxes = cross(rows, cols)
 
+#Setting up the row, column, box and diagonal units
 row_units = [cross(r, cols) for r in rows]
 col_units = [cross(rows, c) for c in cols]
 box_units = [cross(rs, cs) for rs in ('ABC', 'DEF', 'GHI') for cs in ('123','456','789')]
@@ -42,22 +44,25 @@ def naked_twins(values):
     Returns:
         the values dictionary with the naked twins eliminated from peers.
     """
+
+    #assigning possible naked twins to each box value
     possible_twins = [box for box in values.keys() if len(values[box]) == 2]
-    naked_twins = [[box1, box2] for box1 in possible_twins for box2 in peers[box1] if set(values[box1])==set(values[box2])]
-                   
- #   for i in range(len(naked_twins)):
+    naked_twins = [[box1,box2] for box1 in possible_twins for box2 in peers[box1] if set(values[box1])==set(values[box2])]
+
     for i, x in enumerate(naked_twins):
         box1 = naked_twins[i][0]
         box2 = naked_twins[i][1]
         peers1 = set(peers[box1])
         peers2 = set(peers[box2])
         peers_intersect = peers1.intersection(peers2)
-    
+
+        #check for naked twins and eliminate
         for peer_value in peers_intersect:
-            if len(values[peer_value]) > 2:
+            if len(values[peer_value]) >= 2:
                 for remaining_value in values[box1]:
-                   values = assign_value(values, peer_value, values[peer_value].replace(remaining_value, ''))
+                   values = assign_value(values, peer_value, values[peer_value].replace(remaining_value,''))
     return values
+    
 
     # Find all instances of naked twins
     # Eliminate the naked twins as possibilities for their peers
@@ -76,16 +81,16 @@ def grid_values(grid):
             Keys: The boxes, e.g., 'A1'
             Values: The value in each box, e.g., '8'. If the box has no value, then the value will be '123456789'.
     """
-    #pass
-    values = []
+    #converting grid into dictionary
+    alpha = []
     digits = '123456789'
-    for c in grid:
-        if c =='.':
-            values.append(digits)
-        elif c in digits:
-            values.append(c)
-    assert len(values) == 81
-    return dict(zip(boxes, values))
+    for a in grid:
+        if a in digits:
+            alpha.append(a)
+        if a =='.':
+            alpha.append(digits)
+    assert len(alpha) == 81
+    return dict(zip(boxes, alpha))
                 
 
 def display(values):
@@ -94,20 +99,26 @@ def display(values):
     Args:
         values(dict): The sudoku in dictionary form
     """
-    pass
-    
+    #generating the grid for pygame
+    width = 1+max(len(values[s]) for s in boxes)
+    line = '+'.join(['-'*(width*3)]*3)
+    for r in rows:
+        print(''.join(values[r+c].center(width)+('|' if c in '36' else '')
+                      for c in cols))
+        if r in 'CF': print(line)
+    return
 
 def eliminate(values):
-    #pass
+    #eliminate the duplicates of given values in relative units
     solved_values = [box for box in values.keys() if len(values[box]) == 1]
     for box in solved_values:
         digit = values[box]
         for peer in peers[box]:
-            values = assign_value(values, peer, values[peer].replace(digit, ''))
+            values = assign_value(values, peer, values[peer].replace(digit,''))
     return values
 
 def only_choice(values):
-    #pass
+    #eliminate the box values that can only be a single value given their units
     for unit in unitlist:
         for digit in '123456789':
             dplaces = [box for box in unit if digit in values[box]]
@@ -116,7 +127,7 @@ def only_choice(values):
     return values
 
 def reduce_puzzle(values):
-    #pass
+    #cycle through eliminate and only_choice again until stalled
     solved_values = [box for box in values.keys() if len(values[box]) == 1]
     stalled = False
     while not stalled:
@@ -131,7 +142,7 @@ def reduce_puzzle(values):
 
     
 def search(values):
-    #pass
+    #eliminate values from previous functions and pick unfinished boxes with lowest possible matches
     values = reduce_puzzle(values)
     if values is False:
         return False
@@ -154,7 +165,8 @@ def solve(grid):
     Returns:
         The dictionary representation of the final sudoku grid. False if no solution exists.
     """
-
+    #Solve function given previous function
+    
     return search(grid_values(grid))
 
 if __name__ == '__main__':
